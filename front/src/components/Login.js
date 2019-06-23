@@ -19,8 +19,6 @@ export default class Login extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    console.log(this.state);
-    
     fetch('/api/authenticate', {
       method: 'POST',
       body: JSON.stringify(this.state),
@@ -30,7 +28,7 @@ export default class Login extends Component {
     })
     .then(res => {
       if (res.status === 200) {
-        //this.props.history.push('/');
+        this.props.pass(this.state.userName)
       } else {
         const error = new Error(res.error);
         throw error;

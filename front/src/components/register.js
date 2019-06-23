@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from "axios";
+import axios from 'axios';
 
 export default class Register extends Component {
   constructor(props) {
@@ -19,26 +19,6 @@ export default class Register extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    
-    /* fetch('/api/register', {
-      method: 'POST',
-      body: JSON.stringify(this.state),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => {
-      if (res.status === 200) {
-        this.props.history.push('/');
-      } else {
-        const error = new Error(res.error);
-        throw error;
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Error registering, please try again');
-    }); */
 
     const self = this;
 
@@ -48,6 +28,7 @@ export default class Register extends Component {
     })
     .then(response => {
       console.log(response)
+      this.props.pass(this.state.userName)
     })
     .catch(err => {
       console.error(err)

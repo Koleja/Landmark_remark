@@ -99,7 +99,7 @@ app.post('/api/authenticate', function(req, res) {
 
 // verify token
 app.get('/checkToken', withAuth, function(req, res) {
-  res.sendStatus(200);
+  res.sendStatus(200).send(res);
 });
 
 // log out user
@@ -149,20 +149,22 @@ router.get('/getData', (req, res) => {
  */
 // this is our create method
 // this method adds new data in our database
-router.post('/putData', (req, res) => {
+router.post("/putData", (req, res) => {
   let data = new Data();
 
-  const { id, message } = req.body;
+  const { id, content, position, author } = req.body;
 
-  if ((!id && id !== 0) || !message) {
+  if ((!id && id !== 0) || !content || !position || !author) {
     return res.json({
       success: false,
-      error: 'INVALID INPUTS',
+      error: "INVALID INPUTS"
     });
   }
-  data.message = message;
+  data.author = author;
+  data.position = position;
+  data.content = content;
   data.id = id;
-  data.save((err) => {
+  data.save(err => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
   });
