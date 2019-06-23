@@ -31,9 +31,6 @@ export class Land extends Component {
       .then(data => data.json())
       .then(res => {
         this.setState({ data: res.data })
-        console.log(this.state.data)
-        console.log(this.state.data[0].author)
-        console.log(this.state.data[0].position.lat)
       })
   }
 
@@ -85,6 +82,11 @@ export class Land extends Component {
   handleMapClick = (mapProps, map, e) => {
     const location = e.latLng;
 
+    this.setState({
+      showingInfoWindow: false,
+      activeMarker: null
+    })
+
     let accept = window.confirm('Do you want to add new note?')
     if (accept) {
       this.setState({
@@ -95,27 +97,23 @@ export class Land extends Component {
         locations: [...prevState.locations, location]
       }));
 
-      console.log(this.state.locations)
-      console.log(this.state.locations[0].lat())
-
-
-
       /* 
       map.panTo(location); */
     }
   }
 
   displayMarkers() {
-    console.log('f: '+this.state.data)
-    
     return this.state.data.map((note, index) => {
-      return <Marker key={index} id={index} position={{
-       lat: note.position.lat,
-       lng: note.position.lng
-     }}
-     author={ note.author }
-     content={ note.content }
-     onClick={ this.handleMarkerClicked } />
+      return <Marker 
+        key={index} 
+        id={index} 
+        position={{
+          lat: note.position.lat,
+          lng: note.position.lng
+        }}
+        author={ note.author }
+        content={ note.content }
+        onClick={ this.handleMarkerClicked } />
     })
   }
 
@@ -125,7 +123,6 @@ export class Land extends Component {
       activeMarker: marker,
       showingInfoWindow: true
     });
-    console.log(this.state.selectedPlace)
   }
     
 
@@ -133,9 +130,6 @@ export class Land extends Component {
     const {google} = mapProps;
     const service = new google.maps.places.PlacesService(map);
     // ...
-
-    console.log(mapProps)
-    console.log(map)
   }
 
   
@@ -147,73 +141,76 @@ export class Land extends Component {
 
   render() {
     const style = {
-      width: '100vw',
-      height: 'calc(100vh - 50px)'
+      width: '100%',
+      height: '100%'
     }
     if (!this.props.loaded) {
       return <div>Loading...</div>
     }
     return (
-      <div>
-        <Map
-          google={this.props.google}
-          zoom={10}
-          style={style}
-          initialCenter={{ lat: this.state.lat, lng: this.state.lng }}
-          center={{ lat: this.state.lat, lng: this.state.lng }}
-          onClick={ this.handleMapClick }
-          onReady={this.fetchPlaces}
-        >
-          <Marker 
-            position={{ lat: this.state.lat, lng: this.state.lng }} 
-            content="Your current position" 
-            onClick={this.handleMarkerClicked}
-          />
+      <div className="c-land">
+        <div className="c-land__map">
+          <Map
+            google={this.props.google}
+            zoom={10}
+            style={style}
+            initialCenter={{ lat: this.state.lat, lng: this.state.lng }}
+            center={{ lat: this.state.lat, lng: this.state.lng }}
+            onClick={ this.handleMapClick }
+            onReady={this.fetchPlaces}
+          >
+            <Marker 
+              position={{ lat: this.state.lat, lng: this.state.lng }} 
+              content="Your current position" 
+              onClick={this.handleMarkerClicked}
+            />
 
-          
-          {
-            this.state.data &&
-            this.displayMarkers()
-          }
+            
+            {
+              this.state.data &&
+              this.displayMarkers()
+            }
 
-          <InfoWindow
-            marker={this.state.activeMarker}
-            visible={this.state.showingInfoWindow}>
-              <div>
-                <h3>{this.state.selectedPlace.content}</h3>
-                <p>by {this.state.selectedPlace.author}</p>
-              </div>
-          </InfoWindow>
+            <InfoWindow
+              marker={this.state.activeMarker}
+              visible={this.state.showingInfoWindow}>
+                <div>
+                  <h3>{this.state.selectedPlace.content}</h3>
+                  <p>by {this.state.selectedPlace.author}</p>
+                </div>
+            </InfoWindow>
 
-          
-          {/* <div>{
-            this.state.data &&
-            this.state.data.map((note, i) => {
-              console.log(note.position.lat)
-              return (
-                <Marker
-                  key={i}
-                  position={{ lat: note.position.lat, lng: note.position.lng }}
-                />
-              );
-            })
-          }</div> */}
+            
+            {/* <div>{
+              this.state.data &&
+              this.state.data.map((note, i) => {
+                console.log(note.position.lat)
+                return (
+                  <Marker
+                    key={i}
+                    position={{ lat: note.position.lat, lng: note.position.lng }}
+                  />
+                );
+              })
+            }</div> */}
 
-          
-        </Map>
-        
-        {/* <ul>
-        {this.state.data.length <= 0
-          ? "NO DB ENTRIES YET"
-          : this.state.data.map(dat => (
-            <li style={{ padding: "10px" }} key={dat._id}>
-              <p style={{ color: "gray" }}> question: {dat.content} </p>
-              <p style={{ color: "gray" }}> good answer: {dat.position} </p>
-              <p style={{ color: "gray" }}> incorrect answers: {dat.author} </p>
-            </li>
-          ))}
-        </ul>  */}
+            
+          </Map>
+        </div>
 
+        <div>
+            {/* <ul>
+            {this.state.data.length <= 0
+              ? "NO DB ENTRIES YET"
+              : this.state.data.map(dat => (
+                <li style={{ padding: "10px" }} key={dat._id}>
+                  <p style={{ color: "gray" }}> question: {dat.content} </p>
+                  <p style={{ color: "gray" }}> good answer: {dat.position} </p>
+                  <p style={{ color: "gray" }}> incorrect answers: {dat.author} </p>
+                </li>
+              ))}
+            </ul> */}
+        </div>
         
         {
           this.state.showModal && 

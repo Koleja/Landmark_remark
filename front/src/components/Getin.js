@@ -38,6 +38,7 @@ export default class Getin extends Component {
     })
     this.props.passUser(this.state.user) */
     //this.props.passUser(a)
+    this.props.getUserName(a)
     this.props.history.push("/map");
   }
 

@@ -1,0 +1,12 @@
+// Land
+.c-land {
+    width: 100vw;
+    height: calc(100vh - 50px);
+    position: relative;
+
+    &__map {
+        position: relative;
+        width: 100%;
+        height: 50%;
+    }
+}

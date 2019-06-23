@@ -39,7 +39,7 @@ export default class App extends Component {
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/map" component={withAuth(Land)} />
-            <Route path="/getin" component={Getin}  /* getUserName={ this.getUserName } */  />
+            <Route path="/getin" component={Getin}  getUserName={ this.getUserName }  />
           </Switch>
         </BrowserRouter>
       </div>
