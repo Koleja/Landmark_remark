@@ -23,7 +23,6 @@ export default class App extends Component {
     this.setState({
       nick: nick,
     })
-    this.props.history.push("/map");
   }
 
 
@@ -38,8 +37,11 @@ export default class App extends Component {
           </ul>
           <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/map" component={withAuth(Land)} />
-            <Route path="/getin" component={Getin}  getUserName={ this.getUserName }  />
+            <Route path="/map" component={withAuth(Land)} getUser={this.state.nick}/>
+            <Route
+              path="/getin"
+              render={(props) => <Getin {...props} getUserName={this.getUserName} />}
+            />
           </Switch>
         </BrowserRouter>
       </div>

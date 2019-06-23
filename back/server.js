@@ -152,14 +152,15 @@ router.get('/getData', (req, res) => {
 router.post("/putData", (req, res) => {
   let data = new Data();
 
-  const { id, content, position, author } = req.body;
+  const { id, content, position, author, title } = req.body;
 
-  if ((!id && id !== 0) || !content || !position || !author) {
+  if ((!id && id !== 0) || !content || !position || !author || !title) {
     return res.json({
       success: false,
       error: "INVALID INPUTS"
     });
   }
+  data.title = title;
   data.author = author;
   data.position = position;
   data.content = content;

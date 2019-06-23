@@ -31,8 +31,6 @@ export default class Getin extends Component {
       user: a
     })
 
-    const id = this.refs.userNick
-    console.log(id)
     /* this.setState({
       user: a
     })
