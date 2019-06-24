@@ -5,11 +5,7 @@ export default class Home extends Component {
   constructor() {
     super();
     this.state = {
-      message: 'Loading...'
     }
-  }
-  
-  componentDidMount() {
   }
   
   render() {

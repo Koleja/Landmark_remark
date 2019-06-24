@@ -19,7 +19,6 @@ export default class Register extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-
     const self = this;
 
     axios.post('/api/register', {

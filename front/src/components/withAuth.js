@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
-export default function withAuth(ComponentToProtect) {
+export default function withAuth(ComponentToProtect, getUser) {
   return class extends Component {
     constructor() {
       super();
@@ -37,7 +37,7 @@ export default function withAuth(ComponentToProtect) {
       }
       return (
         <React.Fragment>
-          <ComponentToProtect {...this.props} />
+          <ComponentToProtect {...this.props} getUser={getUser} />
         </React.Fragment>
       );
     }

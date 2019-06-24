@@ -1,11 +1,12 @@
-// /backend/data.js
+/**** user.js ****/
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
-// this will be our data base's data structure 
+// user base's data structure 
 const UserSchema = new Schema(
   {
     userName: { 
@@ -42,6 +43,7 @@ UserSchema.pre('save', function(next) {
   }
 });
 
+// verify user password when logining ing
 UserSchema.methods.isCorrectPassword = function(userPass, callback){
   bcrypt.compare(userPass, this.userPass, function(err, same) {
     if (err) {
@@ -52,5 +54,4 @@ UserSchema.methods.isCorrectPassword = function(userPass, callback){
   });
 }
 
-// export the new Schema so we could modify it using Node.js
 module.exports = mongoose.model("User", UserSchema);

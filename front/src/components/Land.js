@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import axios from 'axios';
-//import Map from './Map';
 require('dotenv').config();
+
+const icons = {
+  main: {
+    icon: require('../assets/location-pointer--red.png')
+  },
+  user: {
+    icon: require('../assets/location-pointer--green.png')
+  },
+  other: {
+    icon: require('../assets/location-pointer--purple.png')
+  }
+};
 
 export class Land extends Component {
   constructor() {
@@ -16,9 +27,11 @@ export class Land extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
-      currentUser: ''
+      currentUser: '',
+      filtered: []
     }
     this.handleMapClick = this.handleMapClick.bind(this);
+    this.filterNotes = this.filterNotes.bind(this);
   }
 
   componentDidMount() {
@@ -27,15 +40,17 @@ export class Land extends Component {
   }
 
   getDataFromDb = () => {
-    const self = this
     fetch('/api/getData')
       .then(data => data.json())
       .then(res => {
-        this.setState({ data: res.data })
+        this.setState({ 
+          data: res.data,
+          filtered: res.data
+        })
       })
   }
 
-  putDataToDB(t, c, p, a) {
+  putDataToDB(t, c, p) {
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -49,7 +64,7 @@ export class Land extends Component {
       title: t,
       content: c,
       position: p,
-      author: a
+      author: self.props.getUser
     })
     .then(response => {
       console.log(response)
@@ -68,12 +83,10 @@ export class Land extends Component {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
-
         self.setState({
           lat: position.coords.latitude,
           lng: position.coords.longitude
         })
-        console.log('geolocation found: '+self.state.lat+' '+self.state.lng)
       })
     } else {
       // Browser doesn't support Geolocation
@@ -98,15 +111,12 @@ export class Land extends Component {
       this.setState(prevState => ({
         locations: [...prevState.locations, location]
       }));
-
-      /* 
-      map.panTo(location); */
+      /* map.panTo(location); */
     }
   }
 
-  displayMarkers() {
-    
-    return this.state.data.map((note, index) => {
+  displayMarkers(notes) {
+    return notes.map((note, index) => {
       return <Marker 
         key={index} 
         id={index} 
@@ -117,6 +127,7 @@ export class Land extends Component {
         title={ note.title }
         author={ note.author }
         content={ note.content }
+        icon={ note.author==this.props.getUser ? icons.other.icon : icons.user.icon }
         onClick={ this.handleMarkerClicked } />
     })
   }
@@ -127,22 +138,32 @@ export class Land extends Component {
       activeMarker: marker,
       showingInfoWindow: true
     });
-    console.log(marker)
   }
 
-    
+  filterNotes = (e) => {
+    let currentList = [];
+    let newList = [];
+    const filter = e.target.value.toLowerCase();
 
-  fetchPlaces(mapProps, map) {
-    const {google} = mapProps;
-    const service = new google.maps.places.PlacesService(map);
-    // ...
+    if (e.target.value !== "") {
+      currentList = this.state.filtered;
+
+      Object.keys(currentList).map((i) => {
+        if (currentList[i].author.toLowerCase().includes(filter) || currentList[i].content.toLowerCase().includes(filter)) {
+          newList.push(currentList[i])
+        }
+      })
+    } else {
+      newList = this.state.data
+    }
+
+    this.setState({
+      filtered: newList
+    })
   }
-
-  
 
   onSubmit(e) {
     e.preventDefault();
-    
   }
 
   render() {
@@ -150,17 +171,7 @@ export class Land extends Component {
       width: '100%',
       height: '100%'
     }
-    const icons = {
-      main: {
-        icon: require('../assets/location-pointer--red.png')
-      },
-      user: {
-        icon: require('../assets/location-pointer--green.png')
-      },
-      other: {
-        icon: require('../assets/location-pointer--purple.png')
-      }
-    };
+    
     if (!this.props.loaded) {
       return <div>Loading...</div>
     }
@@ -174,7 +185,6 @@ export class Land extends Component {
             initialCenter={{ lat: this.state.lat, lng: this.state.lng }}
             center={{ lat: this.state.lat, lng: this.state.lng }}
             onClick={ this.handleMapClick }
-            onReady={this.fetchPlaces}
           >
             <Marker 
               position={{ lat: this.state.lat, lng: this.state.lng }} 
@@ -183,13 +193,10 @@ export class Land extends Component {
               icon={icons.main.icon}
               onClick={this.handleMapClick}
             />
-
-            
             {
               this.state.data &&
-              this.displayMarkers()
+              this.displayMarkers(this.state.filtered)
             }
-
             <InfoWindow
               marker={this.state.activeMarker}
               visible={this.state.showingInfoWindow}>
@@ -199,43 +206,47 @@ export class Land extends Component {
                   <p>by {this.state.selectedPlace.author}</p>
                 </div>
             </InfoWindow>
-
-            
-            {/* <div>{
-              this.state.data &&
-              this.state.data.map((note, i) => {
-                console.log(note.position.lat)
-                return (
-                  <Marker
-                    key={i}
-                    position={{ lat: note.position.lat, lng: note.position.lng }}
-                  />
-                );
-              })
-            }</div> */}
-
-            
           </Map>
         </div>
 
+        <legend>
+          <button>all your notes</button>
+          <button>others people notes</button>
+        </legend>
+
         <div>
           <p>{this.props.getUser}</p>
-            <ul>
-            {
-              this.state.data &&
-              Object.keys(this.state.data).map((note, i) => (
-                //<p key={i}>{keyName}: {this.state.weatherData[keyName]}</p>
+          
+          <div>
+            <p>Filter thru notes</p>
+            <div>
+              <button>My notes</button>
+              <button>Other notes</button>
+              <select>
+                <option>user1</option>
+                <option>user2</option>
+              </select>
+              <div>search</div>
+            </div>
+          </div>
 
-                <li key={i}>
-                  <p>{ this.state.data[i].title }</p>
-                  <p>{ this.state.data[i].content }</p>
-                  <p>{ this.state.data[i].author }</p>
-                </li>
-            ))
-            }
+          <div>
+            <p>notes list here</p>
+            <input type="text" placeholder="Search..." onChange={this.filterNotes} />
+            <ul>
+              {
+                this.state.filtered &&
+                Object.keys(this.state.filtered).map((note, i) => (
+                  <li key={i}>
+                    <p>{ this.state.filtered[i].title }</p>
+                    <p>{ this.state.filtered[i].content }</p>
+                    <p>{ this.state.filtered[i].author }</p>
+                  </li>
+              ))
+              }
             </ul>
+          </div>
         </div>
-        
         {
           this.state.showModal && 
           <div className="c-modal">
@@ -251,17 +262,10 @@ export class Land extends Component {
                 name="note"
                 onChange={e => this.setState({ content: e.target.value })}>  
               </textarea>
-              <input 
-                type="text"
-                name="author"
-                placeholder="Sign"
-                onChange={e => this.setState({ author: e.target.value})}
-              ></input>
               <button type="submit" onClick={() => this.putDataToDB(
                 this.state.title,
                 this.state.content, 
-                this.state.position, 
-                this.state.author)}>
+                this.state.position)}>
                 ADD
               </button>
             </form>

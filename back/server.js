@@ -20,9 +20,7 @@ const router = express.Router();
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
-
 let db = mongoose.connection;
-
 db.once('open', () => console.log('connected to the database'));
 
 // checks if connection with the database is successful
@@ -33,10 +31,9 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
-
 app.use(cookieParser());
 
-/****** register/login part *********/
+/****** register/login part *******/
 
 app.get('/api/secret', withAuth, function(req, res) {
   res.send('The password is potato');
@@ -51,7 +48,13 @@ app.post('/api/register', function(req, res) {
       res.status(500)
         .send("Error registering new user please try again.");
     } else {
-      res.status(200).send("Welcome to the club!");
+      // Issue token
+      const payload = { userName };
+      const token = jwt.sign(payload, secret, {
+        expiresIn: '1h'
+      });
+      res.cookie('token', token, { httpOnly: true })
+        .sendStatus(200);
     }
   });
 });
@@ -97,12 +100,12 @@ app.post('/api/authenticate', function(req, res) {
   });
 });
 
-// verify token
+// GET route to verify token
 app.get('/checkToken', withAuth, function(req, res) {
   res.sendStatus(200).send(res);
 });
 
-// log out user
+// POST route to log out user
 app.post('/logout', (req, res) => {
   if (res) {
     res.cookie('token', {expires: Date.now()})
@@ -112,14 +115,9 @@ app.post('/logout', (req, res) => {
 });
 
 
+/********* handling notes part ***********/
 
-
-
-
-/********* fetching data part *************/
-
-// this is our get method
-// this method fetches all available data in our database
+// GET route to fetch notes from db
 router.get('/getData', (req, res) => {
   Data.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
@@ -127,31 +125,9 @@ router.get('/getData', (req, res) => {
   });
 });
 
-// this is our update method
-// this method overwrites existing data in our database
-/* router.post('/updateData', (req, res) => {
-  const { id, update } = req.body;
-  Data.findByIdAndUpdate(id, update, (err) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
-  });
-});
- */
-// this is our delete method
-// this method removes existing data in our database
-/* router.delete('/deleteData', (req, res) => {
-  const { id } = req.body;
-  Data.findByIdAndRemove(id, (err) => {
-    if (err) return res.send(err);
-    return res.json({ success: true });
-  });
-});
- */
-// this is our create method
-// this method adds new data in our database
+// POST route to create note in db
 router.post("/putData", (req, res) => {
   let data = new Data();
-
   const { id, content, position, author, title } = req.body;
 
   if ((!id && id !== 0) || !content || !position || !author || !title) {

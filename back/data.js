@@ -1,8 +1,9 @@
-// /backend/data.js
+/**** data.js ****/
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// this will be our data base's data structure 
+// data base's notes structure 
 const DataSchema = new Schema(
   {
     id: Number,
@@ -14,5 +15,4 @@ const DataSchema = new Schema(
   { timestamps: true }
 );
 
-// export the new Schema so we could modify it using Node.js
 module.exports = mongoose.model("Data", DataSchema);

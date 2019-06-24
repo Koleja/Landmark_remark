@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import './styles/App.scss';
 import Home from './components/Home';
@@ -15,16 +15,11 @@ export default class App extends Component {
     }
   }
 
-  componentDidMount() {
-  }
-
   getUserName = (nick) => {
-    console.log('this is from app: '+nick)
     this.setState({
       nick: nick,
     })
   }
-
 
   render() {
     return (
@@ -37,7 +32,7 @@ export default class App extends Component {
           </ul>
           <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/map" component={withAuth(Land)} getUser={this.state.nick}/>
+            <Route path="/map" component={withAuth(Land, this.state.nick)} />
             <Route
               path="/getin"
               render={(props) => <Getin {...props} getUserName={this.getUserName} />}
