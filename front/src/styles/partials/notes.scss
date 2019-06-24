@@ -1,0 +1,42 @@
+/* ==========================================================================
+Notes
+========================================================================== */
+
+.c-notes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.c-note {
+    display: flex;
+    flex-direction: column;
+    background: no-repeat;
+    background-color: rgba($c-salmon, .3);
+    background-image: url('../assets/bg-note.png');
+    border-radius: 5px;
+    width: 28%;
+    min-height: 100px;
+    padding: .5em;
+    padding-left: 25px;
+    margin: 2vw 0;
+
+    &__item {
+        margin-bottom: .5em;
+
+        &:nth-of-type(2){
+            flex-grow: 1;
+            font-weight: 200;
+        }
+        &--title {
+            text-transform: capitalize;
+            font-size: 1.5em;
+        }
+        &--author {
+            text-transform: capitalize;
+            text-align: right;
+            margin-bottom: 0; 
+        }
+    }
+}

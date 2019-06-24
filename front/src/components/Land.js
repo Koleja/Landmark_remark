@@ -28,10 +28,12 @@ export class Land extends Component {
       activeMarker: {},
       selectedPlace: {},
       currentUser: '',
-      filtered: []
+      filtered: [],
     }
     this.handleMapClick = this.handleMapClick.bind(this);
     this.filterNotes = this.filterNotes.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.refMap = React.createRef();
   }
 
   componentDidMount() {
@@ -99,7 +101,8 @@ export class Land extends Component {
 
     this.setState({
       showingInfoWindow: false,
-      activeMarker: null
+      activeMarker: null,
+      filtered: this.state.data
     })
 
     let accept = window.confirm('Do you want to add new note?')
@@ -116,6 +119,7 @@ export class Land extends Component {
   }
 
   displayMarkers(notes) {
+    console.log('markers: '+notes)
     return notes.map((note, index) => {
       return <Marker 
         key={index} 
@@ -140,6 +144,22 @@ export class Land extends Component {
     });
   }
 
+  showMarker = (pickedNote) => {
+    console.log(pickedNote)
+    this.setState({
+      filtered: [pickedNote],
+      showingInfoWindow: false
+    })
+    this.scroll(this.refMap)
+  }
+
+  returnData = () => {
+    const startList = this.state.data
+    this.setState({
+      filtered: startList
+    })
+  }
+
   filterNotes = (e) => {
     let currentList = [];
     let newList = [];
@@ -162,6 +182,16 @@ export class Land extends Component {
     })
   }
 
+  closeModal() {
+    this.setState({
+      showModal: false
+    })
+  }
+
+  scroll(ref) {
+    //ref.current.scrollIntoView({behavior: 'smooth'})
+  }
+
   onSubmit(e) {
     e.preventDefault();
   }
@@ -176,7 +206,7 @@ export class Land extends Component {
       return <div>Loading...</div>
     }
     return (
-      <div className="c-land">
+      <div className="c-land" ref={this.refMap}>
         <div className="c-land__map">
           <Map
             google={this.props.google}
@@ -188,8 +218,6 @@ export class Land extends Component {
           >
             <Marker 
               position={{ lat: this.state.lat, lng: this.state.lng }} 
-              title="Your current position"
-              author="You" 
               icon={icons.main.icon}
               onClick={this.handleMapClick}
             />
@@ -207,70 +235,60 @@ export class Land extends Component {
                 </div>
             </InfoWindow>
           </Map>
+          {
+            this.state.showModal && 
+            <div className="c-modal">
+              <button className="c-modal__close c-btn c-btn--blue" onClick={this.closeModal}>X</button>
+              <form className="c-form" onSubmit={this.onSubmit}>
+                <input
+                  className="c-form__input"
+                  type="text"
+                  name="title"
+                  placeholder="Type a title"
+                  onChange={e => this.setState({ title: e.target.value })}
+                ></input>
+                <textarea 
+                  className="c-form__input"
+                  placeholder="Type a note"
+                  name="note"
+                  onChange={e => this.setState({ content: e.target.value })}>  
+                </textarea>
+                <button className="c-btn c-btn--green" type="submit" onClick={() => this.putDataToDB(
+                  this.state.title,
+                  this.state.content, 
+                  this.state.position)}>
+                  Add
+                </button>
+              </form>
+            </div>
+          }
         </div>
 
-        <legend>
-          <button>all your notes</button>
-          <button>others people notes</button>
+        <legend className="c-legend">
+          <p className="c-legend__item c-legend__item--here">You are here</p>
+          <p className="c-legend__item c-legend__item--userNotes">That's your note</p>
+          <p className="c-legend__item c-legend__item--others">Others people's notes</p>
         </legend>
 
         <div>
-          <p>{this.props.getUser}</p>
-          
           <div>
-            <p>Filter thru notes</p>
-            <div>
-              <button>My notes</button>
-              <button>Other notes</button>
-              <select>
-                <option>user1</option>
-                <option>user2</option>
-              </select>
-              <div>search</div>
-            </div>
-          </div>
-
-          <div>
-            <p>notes list here</p>
-            <input type="text" placeholder="Search..." onChange={this.filterNotes} />
-            <ul>
+            <p>Find the note!</p>
+            <input className="c-form__input" type="text" placeholder="Search for note..." onChange={this.filterNotes} onFocus={this.returnData} />
+            <ul className="c-notes">
               {
                 this.state.filtered &&
                 Object.keys(this.state.filtered).map((note, i) => (
-                  <li key={i}>
-                    <p>{ this.state.filtered[i].title }</p>
-                    <p>{ this.state.filtered[i].content }</p>
-                    <p>{ this.state.filtered[i].author }</p>
+                  <li className="c-note" key={i} onClick={(e) => this.showMarker(this.state.filtered[i])}>
+                    <p className="c-note__item c-note__item--title">{ this.state.filtered[i].title }</p>
+                    <p className="c-note__item">{ this.state.filtered[i].content }</p>
+                    <p className="c-note__item c-note__item--author">by { this.state.filtered[i].author }</p>
                   </li>
               ))
               }
             </ul>
           </div>
         </div>
-        {
-          this.state.showModal && 
-          <div className="c-modal">
-            <form onSubmit={this.onSubmit}>
-              <input
-                type="text"
-                name="title"
-                placeholder="Type a title"
-                onChange={e => this.setState({ title: e.target.value })}
-              ></input>
-              <textarea 
-                placeholder="Type a note"
-                name="note"
-                onChange={e => this.setState({ content: e.target.value })}>  
-              </textarea>
-              <button type="submit" onClick={() => this.putDataToDB(
-                this.state.title,
-                this.state.content, 
-                this.state.position)}>
-                ADD
-              </button>
-            </form>
-          </div>
-        }
+        
       </div>
     )
   }

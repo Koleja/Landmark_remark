@@ -1,0 +1,36 @@
+/* ==========================================================================
+Form
+========================================================================== */
+
+.c-form {
+    border-top: 1px dotted $c-blue-dark; 
+    border-right: 1px dotted $c-blue-dark;
+    border-left: 1px dotted $c-salmon;
+    border-bottom: 1px dotted $c-salmon;
+    margin-bottom: 1.5em;
+    padding: 1em;
+
+    &__container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__title {
+        font-size: 1.5em;
+    }
+
+    &__input {
+        width: 48%;
+        padding: .5em;
+        margin: 1em 0;
+        border: none;
+        border-radius: 3px;
+        font-size: 1em;
+        background-color: rgba($c-white, .5);
+    }
+
+    .c-btn {
+        display: block;
+    }
+}

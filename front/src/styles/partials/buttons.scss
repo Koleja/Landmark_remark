@@ -1,0 +1,36 @@
+/* ==========================================================================
+Buttons
+========================================================================== */
+
+@mixin button-theme($bg) {
+    background: $bg;
+
+    a:hover {
+        opacity: 1;
+    }
+    &:hover {
+        background:lighten($bg,8%);
+        transition: all 0.3s ease;
+    }
+    &:active {
+        background:darken($bg,25%);
+    } 
+}
+
+.c-btn {
+    color: white;
+    text-decoration: none;
+    padding: .5em;
+    border-radius: 3px;
+    font-size: 1.2em;
+   
+    &--green {
+        @include button-theme(#009178);
+    }
+    &--blue {
+        @include button-theme(#92b8c9);
+    }
+    &--brown {
+        @include button-theme(#aea991);
+    }
+}

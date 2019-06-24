@@ -134,3 +134,14 @@ button {
 * {
     box-sizing: border-box;
 }
+
+a {
+    text-decoration: none;
+
+    &:visited {
+        color: inherit;
+    }
+    &:hover {
+        opacity: .6;
+    }
+}

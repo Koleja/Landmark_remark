@@ -36,25 +36,29 @@ export default class Register extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
-        <h1>Register Below!</h1>
-        <input
-          type="text"
-          name="userName"
-          placeholder="Enter your nick"
-          value={this.state.userName}
-          onChange={this.handleInputChange}
-          required
-        />
-        <input
-          type="password"
-          name="userPass"
-          placeholder="Enter password"
-          value={this.state.password}
-          onChange={this.handleInputChange}
-          required
-        />
-       <input type="submit" value="Submit"/>
+      <form className="c-form" onSubmit={this.onSubmit}>
+        <h1 className="c-form__title">Register</h1>
+        <div className="c-form__container">
+          <input
+            className="c-form__input"
+            type="text"
+            name="userName"
+            placeholder="Enter your nick"
+            value={this.state.userName}
+            onChange={this.handleInputChange}
+            required
+          />
+          <input
+            className="c-form__input"
+            type="password"
+            name="userPass"
+            placeholder="Enter password"
+            value={this.state.password}
+            onChange={this.handleInputChange}
+            required
+          />
+        </div>
+       <input className="c-btn c-btn--green" type="submit" value="Submit"/>
       </form>
     );
   }

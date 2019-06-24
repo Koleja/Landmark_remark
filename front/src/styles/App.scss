@@ -1,6 +1,13 @@
-@import './partials/reset.scss';
-@import './partials/vars.scss';
-@import './partials/global.scss';
+@import './global/reset.scss';
+@import './global/fonts.scss';
+@import './global/vars.scss';
+
+@import './layout/main.scss';
+@import './layout/land.scss';
+@import './layout/home.scss';
 
 @import './partials/modal.scss';
-@import './partials/land.scss'
+@import './partials/buttons.scss';
+@import './partials/form.scss';
+@import './partials/notes.scss';
+@import './partials/legend.scss';

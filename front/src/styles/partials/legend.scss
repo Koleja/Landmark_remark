@@ -1,0 +1,36 @@
+/* ==========================================================================
+Legend
+========================================================================== */
+
+.c-legend {
+    display: flex;
+    flex-direction: row;
+    margin: 5vw 0;
+
+    &__item {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        &::before {
+            content: '';
+            display: block;
+            position: relative;
+            background: no-repeat, center;
+            background-size: contain;
+            width: 30px;
+            height: 100%;
+        }
+
+        &--here::before {
+            background-image: url('../assets/location-pointer--red.png')
+        }
+        &--userNotes::before {
+            background-image: url('../assets/location-pointer--purple.png')
+        }
+        &--others::before {
+            background-image: url('../assets/location-pointer--green.png')
+        }
+    }
+}

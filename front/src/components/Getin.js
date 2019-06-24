@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Register from './register';
+import Register from './Register';
 import Login from './Login';
-import axios from 'axios';
 
 export default class Getin extends Component {
   constructor(props) {
@@ -11,16 +10,6 @@ export default class Getin extends Component {
       userName : '',
       userPass: ''
     }
-  }
-
-  logout() {
-    axios.post('/logout')
-    .then(response => {
-      console.log(response)
-    })
-    .catch(err => {
-      console.error(err)
-    });
   }
 
   onLogin = (a) => {
@@ -34,11 +23,24 @@ export default class Getin extends Component {
   render() {
     return (
       <div>
-        <Register pass={ (a) => this.onLogin(a)}></Register>
-        <Login pass={ (a) => this.onLogin(a)}></Login>
         <div>
-          <button onClick={ this.logout }>Log out</button>
+          <Register pass={ (a) => this.onLogin(a)}></Register>
+          <p className="f-subheader">OR</p>
+          <Login pass={ (a) => this.onLogin(a)}></Login>
         </div>
+        {
+          /* this.state.user 
+          ?
+          <div>
+            <Register pass={ (a) => this.onLogin(a)}></Register>
+            <p className="f-subheader">OR</p>
+            <Login pass={ (a) => this.onLogin(a)}></Login>
+          </div> 
+          :
+          <div>
+            <button onClick={ this.logout }>Log out</button>
+          </div> */
+        }
       </div>
     );
   }

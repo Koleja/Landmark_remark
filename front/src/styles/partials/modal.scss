@@ -3,20 +3,38 @@ Modal
 ========================================================================== */
 
 .c-modal {
-    width: 100vw;
-    height: 50%;
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding: 10vw;
+    padding: 5vw;
     z-index: 10;
     background-color: rgba($c-black, .5);
 
-    form {
+    &__close {
+        align-self: flex-end;
+        width: 2.1em;
+        height: 2.1em;
+    }
+
+    .c-form {
         display: flex;
         flex-direction: column;
+        width: 100%;
+        margin-bottom: 0;
+
+        &__input {
+            width: 100%;
+            background-color: $c-white;
+        }
+
+        .c-btn {
+            width: 100px;
+            margin: 0 auto;
+        }
     }
 }

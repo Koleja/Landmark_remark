@@ -1,0 +1,65 @@
+/* ==========================================================================
+Main
+========================================================================== */
+
+.l-main {
+    background: no-repeat, center;
+    background-size: cover;
+    background-image: url('../assets/Abstract-Envelope.svg');
+    min-width: 100vw;
+    min-height: 100vh;
+    font-family: 'Roboto';
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 70px 10vw;
+    }
+}
+
+.c-header {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 20;
+    background-color: $c-beige;
+    box-shadow: 0px 2px 10px 0px $c-beige-dark;
+
+    &__nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        &--item {
+            padding: 1em;
+            font-size: 1em;
+        }
+
+        &--btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+
+            &:hover {
+                opacity: .5;
+            }
+        }
+    }
+
+    &__nick {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1em;
+    }
+}
+
+.f-subheader {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
