@@ -23,15 +23,18 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "since 2010"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "since 2010"
     ]
+  },
+  "devDependencies": {
+    "browserslist": "4.6.2"
+  },
+  "resolutions": {
+    "browserslist": "4.6.2",
+    "caniuse-lite": "1.0.30000974"
   },
   "proxy": "http://localhost:3001"
 }

@@ -21,8 +21,11 @@ Buttons
     color: white;
     text-decoration: none;
     padding: .5em;
+    border: none;
+    -webkit-appearance: none;
     border-radius: 3px;
     font-size: 1.2em;
+    cursor: pointer;
    
     &--green {
         @include button-theme(#009178);

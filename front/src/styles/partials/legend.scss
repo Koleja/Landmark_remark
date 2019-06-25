@@ -5,16 +5,20 @@ Legend
 .c-legend {
     display: flex;
     flex-direction: row;
-    margin: 5vw 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 2vw 0;
 
     &__item {
         position: relative;
         width: 100%;
         display: flex;
         align-items: center;
+        margin: 1vw 1vw 1vw 0;
 
         &::before {
-            content: '';
+            content: 'x';
+            color: transparent;
             display: block;
             position: relative;
             background: no-repeat, center;

@@ -41,6 +41,7 @@ export class Land extends Component {
     this.getLocation()
   }
 
+  // fetch notes from db
   getDataFromDb = () => {
     fetch('/api/getData')
       .then(data => data.json())
@@ -52,6 +53,7 @@ export class Land extends Component {
       })
   }
 
+  // save note to db
   putDataToDB(t, c, p) {
     let currentIds = this.state.data.map(data => data.id);
     let idToBeAdded = 0;
@@ -69,7 +71,6 @@ export class Land extends Component {
       author: self.props.getUser
     })
     .then(response => {
-      console.log(response)
       self.setState({
         showModal: false
       })
@@ -80,6 +81,7 @@ export class Land extends Component {
     });
   }
 
+  // get current location of device and create marker
   getLocation() {
     const self = this;
 
@@ -96,6 +98,7 @@ export class Land extends Component {
     }
   }
 
+  // on map click show modal to create new note and marker on the map
   handleMapClick = (mapProps, map, e) => {
     const location = e.latLng;
 
@@ -118,8 +121,8 @@ export class Land extends Component {
     }
   }
 
+  // create all markers for notes fetched from db
   displayMarkers(notes) {
-    console.log('markers: '+notes)
     return notes.map((note, index) => {
       return <Marker 
         key={index} 
@@ -131,11 +134,12 @@ export class Land extends Component {
         title={ note.title }
         author={ note.author }
         content={ note.content }
-        icon={ note.author==this.props.getUser ? icons.other.icon : icons.user.icon }
+        icon={ note.author === this.props.getUser ? icons.other.icon : icons.user.icon }
         onClick={ this.handleMarkerClicked } />
     })
   }
 
+  // on clicked marker show its info window
   handleMarkerClicked = (props, marker, e) => {
     this.setState({
       selectedPlace: props,
@@ -144,8 +148,8 @@ export class Land extends Component {
     });
   }
 
+  // on picked note scroll to map and display note's marker
   showMarker = (pickedNote) => {
-    console.log(pickedNote)
     this.setState({
       filtered: [pickedNote],
       showingInfoWindow: false
@@ -153,6 +157,7 @@ export class Land extends Component {
     this.scroll(this.refMap)
   }
 
+  // reset list of markers to initial 
   returnData = () => {
     const startList = this.state.data
     this.setState({
@@ -160,6 +165,7 @@ export class Land extends Component {
     })
   }
 
+  // filter notes by phrase from input and update markers on the map by search results
   filterNotes = (e) => {
     let currentList = [];
     let newList = [];
@@ -169,7 +175,7 @@ export class Land extends Component {
       currentList = this.state.filtered;
 
       Object.keys(currentList).map((i) => {
-        if (currentList[i].author.toLowerCase().includes(filter) || currentList[i].content.toLowerCase().includes(filter)) {
+        if (currentList[i].author.toLowerCase().includes(filter) || currentList[i].title.toLowerCase().includes(filter) || currentList[i].content.toLowerCase().includes(filter)) {
           newList.push(currentList[i])
         }
       })
@@ -189,7 +195,7 @@ export class Land extends Component {
   }
 
   scroll(ref) {
-    //ref.current.scrollIntoView({behavior: 'smooth'})
+    ref.current.scrollIntoView({behavior: 'smooth'})
   }
 
   onSubmit(e) {
@@ -271,7 +277,7 @@ export class Land extends Component {
         </legend>
 
         <div>
-          <div>
+          <div className="c-land__container">
             <p>Find the note!</p>
             <input className="c-form__input" type="text" placeholder="Search for note..." onChange={this.filterNotes} onFocus={this.returnData} />
             <ul className="c-notes">

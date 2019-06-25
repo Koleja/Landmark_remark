@@ -14,8 +14,8 @@ Main
         display: flex;
         flex-direction: column;
         justify-content: center;
-        min-height: 100vh;
-        padding: 70px 10vw;
+        min-height: calc(100vh - 140px);
+        padding: 70px 10vw 10vw 10vw;
     }
 }
 
@@ -56,6 +56,10 @@ Main
         justify-content: center;
         align-items: center;
         padding: 1em;
+
+        span {
+            text-transform: capitalize;
+        }
     }
 }
 

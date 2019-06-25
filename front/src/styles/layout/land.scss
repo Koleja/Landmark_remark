@@ -10,5 +10,20 @@ Land
         position: relative;
         width: 100%;
         height: 50vh;
+        min-height: 350px;
+    }
+
+    &__container {
+        border-top: 1px dotted $c-blue-dark;
+        border-right: 1px dotted $c-salmon;
+        padding-top: 3vw;
+    }
+}
+
+@media (max-width: 640px) {
+    .c-land {
+        &__map {
+            min-height: 250px;
+        }
     }
 }

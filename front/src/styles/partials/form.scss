@@ -9,6 +9,7 @@ Form
     border-bottom: 1px dotted $c-salmon;
     margin-bottom: 1.5em;
     padding: 1em;
+    box-sizing: border-box;
 
     &__container {
         display: flex;
@@ -28,6 +29,7 @@ Form
         border-radius: 3px;
         font-size: 1em;
         background-color: rgba($c-white, .5);
+        box-sizing: border-box;
     }
 
     .c-btn {

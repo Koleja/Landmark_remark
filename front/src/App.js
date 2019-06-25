@@ -58,7 +58,7 @@ export default class App extends Component {
             <div className="c-header__nick">
               {
                 this.state.nick &&
-                <p>Hi, {this.state.nick}</p>
+                <p>Hi, <span>{this.state.nick}</span></p>
               }
             </div>
           </div>

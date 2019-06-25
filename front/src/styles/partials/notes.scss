@@ -6,7 +6,7 @@ Notes
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .c-note {
@@ -14,13 +14,14 @@ Notes
     flex-direction: column;
     background: no-repeat;
     background-color: rgba($c-salmon, .3);
+    background-size: cover;
     background-image: url('../assets/bg-note.png');
     border-radius: 5px;
-    width: 28%;
+    width: 23%;
     min-height: 100px;
     padding: .5em;
     padding-left: 25px;
-    margin: 2vw 0;
+    margin: 2vw 2% 2vw 0;
 
     &__item {
         margin-bottom: .5em;
@@ -38,5 +39,17 @@ Notes
             text-align: right;
             margin-bottom: 0; 
         }
+    }
+}
+
+@media (max-width: 850px) {
+    .c-note {
+        width: 28%;
+    }
+}
+
+@media (max-width: 480px) {
+    .c-note {
+        width: 80%;
     }
 }
